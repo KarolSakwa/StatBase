@@ -1,0 +1,46 @@
+{% load static %}
+<nav class="nav-test">
+    <div class="container nav-wrapper">
+        <a href="/">
+            <img class="logo-small" src="{% static 'img/logo.png' %}">
+        </a>
+        <a href="/" class="brand-logo">
+            StatBase
+        </a>        
+        <ul id="nav-mobile" class="right">
+            <li class="nav-link">
+                <div class="searchbox-container">
+                    <form class="searchbox" action="{% url 'new_search' %}" method="post" >
+                        {% csrf_token %}
+                        <input type="search" id="header-search" placeholder="Search for player" name="search" class="searchbox-input" onkeyup="buttonUp();" required>
+                        <input type="submit" class="searchbox-submit" value="GO">
+                        <span class="searchbox-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    </form>
+                </div>
+            </li>
+
+            <li class="nav-link" id="ahuyu">
+                <ul class="dds">
+                    <li><a class="dropdown-trigger" data-target="dropdown">Best... </a></li>
+                </ul>
+                <ul id="dropdown" class="dropdown-content">
+                    <li><a href="/all_90_scorers">Goals/90 minutes</a></li>
+                    <li><a href="/most_assists">Assists/90 minutes</a></li>
+                    <li><a href="/injury_prone">Most injury-prone</a></li>
+                    <li><a href="/most_aggressive">Most aggressive</a></li>
+                </ul>
+            </li>
+            <li class="nav-link"><a href="/top_players">Top players</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<script>
+
+    $('#ahuyu').on('click',function(){
+      $('#dropdown').slideToggle(280);
+    });
+    
+    
+</script>

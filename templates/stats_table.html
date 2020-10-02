@@ -1,0 +1,41 @@
+{% load static %}
+{% load my_filters %}
+<div class="my-table-container">
+    <div class="best-goals-90-container">
+      <table class="best-table" id="best-goals-90-table">
+        <h5 class="top-scorers-heading"> {{stats_table_header}} </h5>
+        <thead>
+          <tr>
+            <th class="bg90-header">Rank</th>
+            <th class="bg90-header">Player</th>
+            {% for attr_name in necessary_attrs_names %}
+            {% if forloop.counter == necessary_attrs_names|length %}
+            <th class="bg90-header key-header">{{attr_name}}</th>
+            {% else %}
+            <th class="bg90-header">{{attr_name}}</th>
+            {% endif %}
+            {% endfor %}
+          </tr>
+        </thead>  
+        <tbody>
+        {% for player in all_players_list %}
+          <tr>
+            <td class="bg90-value">{{forloop.counter}}</td>
+            <td class="bg90-value" id="bg90-profile"> 
+              <a href="player/{{player.player_id}}"><img src="{{player.profile_img_url}}"></a> 
+              <a href="player/{{player.player_id}}">{{player.full_name}}</a>
+            </td>
+            {% for player_attribute in player|attributes:player_key_attribute %} 
+              {% if forloop.counter == player|attributes:player_key_attribute|length %}   
+              <td class="bg90-value key-value">{{player_attribute}}</td>
+              {% else %}
+              <td class="bg90-value">{{player_attribute}}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>

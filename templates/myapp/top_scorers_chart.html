@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        <canvas id="top-scorers-chart">
+            <script>generate_top_scorers_chart('{{ data }}');</script>
+        </canvas>
+
+
+
+        <br>
+{{test_var}}
+<br>
+        
+
+{% endblock content %}
+

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{test_var}}
+<div class="player_profile_container">
+  <div class="player-bio-container">
+    <div class="player-info-container">
+      <h3 class="player-sb-full-name">{{ sb_player.full_name }}</h3>
+      <p class="player_sb_long_name">Full name: {{ sb_player.long_name }}</p>
+      <p class="player_sb_nationality">Nationality: {{ sb_player.nationality }}</p>
+      <p class="player_sb_date_of_birth">Date of birth: {{ sb_player.date_of_birth }}</p>
+      <p class="player_sb_position">Preffered position: {{ sb_player.position }}</p>
+      <p class="player_sb_position">Club: {{ sb_player.club }}</p>
+    </div>
+    <div class="profile-image-container">
+        <img class="profile-img-big" src="{{ sb_player.profile_img_url }}" > 
+    </div>
+    <div class="subnav-container">
+      <ul id="pp-submenu">
+        <li class="pps-button" id="pps-button-first">
+          <span>Compare with...</span>
+          <div class="searchbox-compare-container">
+            <form class="searchbox-compare" action="{% url 'compare_players' %}" method="get" >
+                <input type="text" id="compare-players" placeholder="Player to compare" name="search-compare" class="searchbox-compare-input" onkeyup="buttonCompareUp();" required>
+                <input type="text" name="player_1_id" value={{sb_player.player_id}} style='display: none;'>
+                <button class="compare-submit" type="submit" name="action" style="background-color: #514a4a;">GO
+              </button>
+                <script>get_all_players_names('{{sent_names_id_dict}}');</script>
+            </form>
+        </div>
+        </li>
+        <form class="form-find-similar" action="{% url 'find_similar' %}" method="post" >
+          {% csrf_token %}
+          <input type="text" name="player_1_id" value={{sb_player.player_id}} style='display: none;'>
+          <button class="pps-button" id="pps-button-find-similar" type="submit" name="action" ><span>Find similar players</span>
+        </button>
+      </form>
+
+      </ul>
+    </div>
+  </div>
+  <div class="player-career-total-container">
+    <h5>Total career stats:</h5>
+      <div class="player_career_total_table">
+        <table class="player-career-table-tg">
+          <tr>
+            <th class="total-header tippy-tooltipped" id="tt_seasons">Seasons</th>
+            <th class="total-header">Games</th>
+            <th class="total-header">Minutes</th>
+            <th class="total-header">Goals</th>
+            <th class="total-header">Assists</th>
+            <th class="total-header tippy-tooltipped" id="tt_cc">CC</th>
+            <th class="total-header">Goals/90</th>
+            <th class="total-header">Assists/90</th>
+            <th class="total-header">Cc/90</th>
+            <th class="total-header">Yellow cards</th>
+            <th class="total-header">Red cards</th>
+            <th class="total-header tippy-tooltipped" id="tt_yc90">YC/90</th>
+            <th class="total-header tippy-tooltipped" id="tt_rc90">RC/90</th>
+            <th class="total-header tippy-tooltipped" id="tt_sb_aggression_index">SB Aggression Index</th>
+            <th class="total-header">SB Index</th>
+          </tr>
+          <tr>
+            <td class="total-value">{{sb_player.played_seasons}}</td>
+            <td class="total-value">{{sb_player.played_games}}</td>
+            <td class="total-value">{{sb_player.minutes}}</td>
+            <td class="total-value">{{sb_player.goals}}</td>
+            <td class="total-value">{{sb_player.assists}}</td>
+            <td class="total-value">{{sb_player.cc}}</td>
+            <td class="total-value">{{sb_player.goals_90}}</td>
+            <td class="total-value">{{sb_player.assists_90}}</td>
+            <td class="total-value">{{sb_player.cc_90}}</td>
+            <td class="total-value">{{sb_player.yellow_cards}}</td>
+            <td class="total-value">{{sb_player.red_cards}}</td>
+            <td class="total-value">{{sb_player.yc90}}</td>
+            <td class="total-value">{{sb_player.rc90}}</td>
+            <td class="total-value">{{sb_player.sb_aggression_index}}</td>
+            <td class="total-value">{{sb_player.total_sb_index}}</td>
+          </tr>
+        </table>
+      </div>
+  </div>
+  <div class="player_goals_container">
+    <h5>Stats by season:</h5>
+        <canvas id="myChartYu"><script>player_season_goal_chart('{{player_obj_js}}');</script></canvas>
+  </div>
+  <div class="player_goals_types_container">
+    <h5>Goals by type:</h5>
+        <canvas id="goal_type_chart"><script>generate_goal_type_chart('{{player_obj_js}}');</script></canvas>
+  </div>
+</div>
+
+
+<br>
+
+{% endblock content %}

@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <div class="player-1-container">
+        <div class="player_1_img_container">
+            <img src="{{ player_1_obj.profile_img_url }}">
+         </div>
+        <div class="player-1-bio-container">
+            <p class="player-1-name"><a href=player/{{player_1_obj.player_id}}>{{player_1_obj.full_name}}</a></p>
+            <p class="player_1_nationality">{{ player_1_obj.nationality }}</p>
+            <p class="player_1_date_of_birth">{{ player_1_obj.date_of_birth }}</p>
+            <p class="player_1_position">{{ player_1_obj.position }}</p>
+            <p class="player_1_position">{{ player_1_obj.club }}</p>
+        </div>
+    </div>
+    <div class="player-2-container">
+        <div class="player-2-bio-container">
+            <p class="player-2-name"><a href=player/{{player_2_obj.player_id}}>{{player_2_obj.full_name}}</a></p>
+            <p class="player_2_nationality">{{ player_2_obj.nationality }}</p>
+            <p class="player_2_date_of_birth">{{ player_2_obj.date_of_birth }}</p>
+            <p class="player_2_position">{{ player_2_obj.position }}</p>
+            <p class="player_2_position">{{ player_2_obj.club }}</p>
+        </div>
+        <div class="player_2_img_container">
+            <img src="{{ player_2_obj.profile_img_url }}">
+        </div>
+    </div>
+    <h5 class="compare-header">Total career stats</h5>
+    <div class="player_comp_main_stats_container">
+        <table class="player-comp-main-stats-table">
+            <tbody>
+                <tr>
+                    {% if player_1_obj.played_games > player_2_obj.played_games %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.played_games == player_2_obj.played_games %} 
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.played_games}}</td>
+                    <td class="player-comp-main-stats-table_header">Games</td>
+                    {% if player_2_obj.played_games > player_1_obj.played_games %}
+                    <td class="player-main-stat higher">
+                    {% elif player_2_obj.played_games == player_1_obj.played_games %} 
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.played_games}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.total_games_injured > player_2_obj.total_games_injured %}
+                    <td class="player-main-stat equal">
+                    {% elif player_1_obj.total_games_injured == player_2_obj.total_games_injured %} 
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat equal">
+                    {% endif %}
+                    {{player_1_obj.total_games_injured}}</td>
+                    <td class="player-comp-main-stats-table_header">Games missed (injuries)</td>
+                    {% if player_2_obj.total_games_injured > player_1_obj.total_games_injured %}
+                    <td class="player-main-stat equal">
+                    {% elif player_2_obj.total_games_injured == player_1_obj.total_games_injured %} 
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat equal">
+                    {% endif %}
+                    {{player_2_obj.total_games_injured}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.goals > player_2_obj.goals %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.goals == player_2_obj.goals %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.goals}}</td>
+                    <td class="player-comp-main-stats-table_header">Goals</td>
+                    {% if player_2_obj.goals > player_1_obj.goals %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.goals == player_2_obj.goals %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.goals}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.assists > player_2_obj.assists %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.assists == player_2_obj.assists %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.assists}}</td>
+                    <td class="player-comp-main-stats-table_header">Assists</td>
+                    {% if player_2_obj.assists > player_1_obj.assists %}
+                    <td class="player-main-stat higher">
+                    {% elif player_2_obj.assists == player_1_obj.assists %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.assists}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.cc > player_2_obj.cc %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.cc == player_2_obj.cc %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.cc}}</td>
+                    <td class="player-comp-main-stats-table_header">Canadian points</td>
+                    {% if player_2_obj.cc > player_1_obj.cc %}
+                    <td class="player-main-stat higher">
+                    {% elif player_2_obj.cc == player_1_obj.cc %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.cc}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.goals_90 > player_2_obj.goals_90 %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.goals_90 == player_2_obj.goals_90 %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.goals_90}}</td>
+                    <td class="player-comp-main-stats-table_header">Goals per 90 minutes</td>
+                    {% if player_2_obj.goals_90 > player_1_obj.goals_90 %}
+                    <td class="player-main-stat higher">
+                    {% elif player_2_obj.goals_90 == player_1_obj.goals_90 %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.goals_90}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.assists_90 > player_2_obj.assists_90 %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.assists_90 == player_2_obj.assists_90 %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.assists_90}}</td>
+                    <td class="player-comp-main-stats-table_header">Assists per 90 minutes</td>
+                    {% if player_2_obj.assists_90 > player_1_obj.assists_90 %}
+                    <td class="player-main-stat higher">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.assists_90}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.cc_90 > player_2_obj.cc_90 %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.cc_90 == player_2_obj.cc_90 %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.cc_90}}</td>
+                    <td class="player-comp-main-stats-table_header">Canadian points per 90 minutes</td>
+                    {% if player_2_obj.cc_90 > player_1_obj.cc_90 %}
+                    <td class="player-main-stat higher">
+                    {% elif player_2_obj.cc_90 == player_1_obj.cc_90 %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.cc_90}}</td>
+                </tr>
+                <tr>
+                    {% if player_1_obj.total_sb_index > player_2_obj.total_sb_index %}
+                    <td class="player-main-stat higher">
+                    {% elif player_1_obj.total_sb_index == player_2_obj.total_sb_index %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_1_obj.total_sb_index}}</td>
+                    <td class="player-comp-main-stats-table_header">Total SB index</td>
+                    {% if player_2_obj.total_sb_index > player_1_obj.total_sb_index %}
+                    <td class="player-main-stat higher">
+                    {% elif player_2_obj.total_sb_index == player_1_obj.total_sb_index %}
+                    <td class="player-main-stat equal">
+                    {% else %} 
+                    <td class="player-main-stat lower">
+                    {% endif %}
+                    {{player_2_obj.total_sb_index}}</td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <h5 class="compare-header">Stats by season</h5>
+    <canvas id="player_comp_chart"><script>generate_player_comparison_chart('{{player_1_obj_js}}', '{{player_2_obj_js}}');</script></canvas>
+    <h5 class="compare-header">Type of goals</h5>
+    <canvas id="goal_type_comparison_chart"><script>generate_goal_type_comparison_chart('{{player_1_obj_js}}', '{{player_2_obj_js}}');</script></canvas>
+    <h5 class="compare-header">Stats per 90 minutes</h5>
+    <canvas id="stats_comparison_radar"><script>generate_stats_comparison_radar('{{player_1_obj_js}}', '{{player_2_obj_js}}');</script></canvas>
+{% endblock content %}

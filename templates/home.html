@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h5 class="home-title">Most popular players:</h5>
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    {% for player in test_var %}
+    <div class="swiper-slide">
+      <img class="swiper-background-club" src={{player.club_img_url}}>
+      <img class="swiper-background-national" src={{player.national_team_img_url}}>
+      <div class="swiper-content-wrapper">
+      <img class="swiper-img" src={{player.profile_img_url}}>
+      <p class="swiper-name"><a href=player/{{player.player_id}}>{{player.full_name}}</a></p>
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+  <!-- Add Arrows -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+
+{% endblock content %}

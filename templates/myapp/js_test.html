@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{test_var}}
+<br>
+{<br>
+{% for x in all_leagues_names %}
+    {{x}} <br>
+{% endfor %}
+}
+
+
+{% endblock content %}

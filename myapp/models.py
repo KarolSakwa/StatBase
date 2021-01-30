@@ -659,7 +659,7 @@ class Player(models.Model):
         return sanitized_list
 
     def get_all_methods(self):
-        object_all_properties = dir(self) # dir returns list sorted aphabetically, I need different order of a list, that's why last 5 lines of this     function looks this way
+        object_all_properties = dir(self) # dir returns list sorted aphabetically, I need different order of a list, that's why last 5 lines of this function looks this way
         object_methods_sorted_improperly = []
         for element in object_all_properties:
             if element.startswith("get"):

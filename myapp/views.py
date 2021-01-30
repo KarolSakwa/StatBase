@@ -48,7 +48,7 @@ def player_profile(request, player_tm_id):
 
 
 def db_update(request):
-    current_player_id = 40432
+    current_player_id = 40432 
     if not Player.objects.filter(player_id=current_player_id).exists():
         models.Player.objects.create(
             player_id=current_player_id)

@@ -10,8 +10,7 @@ SB_INDEX_ATTRS = ["played_games", "goals", "assists", "minutes", "goals_90", "as
 INJURY_PRONE_ATTRS_NAMES = ["Games played", "Minutes", "SB index", "Total days injured", "Games missed"]
 INJURY_PRONE_ATTRS = ["played_games", "minutes", "total_sb_index", "total_days_injured", "total_games_injured"]
 
-
-# League weights for SB index calculation - for now it's assigned by subjectively by me, eventually I'd like it to be calculated in some objective way
+# League weights for SB index calculation - for now it's assigned subjectively by me, eventually I'd like it to be calculated in some objective way
 
 leagues_weights = {
     'LaLiga2': 3,

@@ -807,3 +807,4 @@ def get_leagues_weights():
     for league in League.objects.all():
         league.weight = leagues_weights[league.name]
         league.save()
+###

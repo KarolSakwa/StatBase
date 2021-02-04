@@ -26,7 +26,7 @@ SECRET_KEY = 'kg)m(bad#awyhdu_!84)we%^w29qb(0kqo!o^fpo3tus@njq&t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['statbasetest.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -124,3 +124,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/StatBase"),
     '/StatBase/StatBase/static/StatBase/',
 ]
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR,  'templates'),
+    # Add to this list all the locations containing your static files 
+)

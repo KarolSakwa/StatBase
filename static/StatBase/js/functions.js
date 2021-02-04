@@ -1,35 +1,34 @@
 $(document).ready(function(){	 
   // comparison functions
-  var openCompareButton = $('#pps-button-first');
+  var openCompareButton = $('#pps-button-first, .searchbox-compare');
   var submitCompareIcon = $('.searchbox-compare-submit');
   var inputCompareBox = $('.searchbox-compare-input');
   var searchBoxCompare = $('.searchbox-compare');
   var isOpenCompare = false;
-  $(".search-result-row").click(function() {
+
+  $(".top-results-row, .top-results-row-even, .search-result-row").click(function() {
     window.location = $(this).data("url");
   });
+
   openCompareButton.click(function(){
     if(isOpenCompare == false){
       searchBoxCompare.addClass('searchbox-compare-open');
-      $('.searchbox-compare-icon').addClass('clicked');
-      $('.searchbox-compare-submit').addClass('clicked');
+      $('.searchbox-compare-icon, .searchbox-compare-submit').addClass('clicked');
       inputCompareBox.focus();
       isOpenCompare = true;
     } 
     else {
       searchBoxCompare.removeClass('searchbox-compare-open');
-      $('.searchbox-compare-icon').removeClass('clicked');
-      $('.searchbox-compare-submit').removeClass('clicked');
+      $('.searchbox-compare-icon, .searchbox-compare-submit').removeClass('clicked');
       inputCompareBox.focusout();
       isOpenCompare = false;
     }
-  });  
+  }); 
+  
   openCompareButton.mouseup(function(){
     return false;
   });
-  searchBoxCompare.mouseup(function(){
-    return false;
-  });
+  
   $(document).mouseup(function(){
     if(isOpenCompare == true){
       $('.searchbox-compare-icon').css('display','block');
@@ -416,6 +415,13 @@ function get_all_players_names(players_names_id_dict){
     $( "#compare-players" ).autocomplete({
       source: players_names_list,
       select: function( event, ui ) {
+      },
+      change: function( event, ui ) {
+        if ( !ui.item ) {
+              alert("You have to select one of the players from drop-down list!")
+              $("#compare-players").val("");
+              window.location.reload(true);
+        }
       }
     });
   });

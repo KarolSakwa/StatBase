@@ -75,19 +75,19 @@ class Player(models.Model):
 
     # M E T H O D S   C R E A T I N G   A T T R I B U T E S
 
-    def get_full_name(self, player_id):
+    def get_full_name(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         if player_profile_tm_page_content.find('div' , {'class': 'dataName'}) != None:
             player_tm_name = "N O B O D Y" if player_profile_tm_page_content.find('div', {'class': 'dataName'}) == None else player_profile_tm_page_content.    find('div', {'class': 'dataName'}).find('h1').text
         return player_tm_name
     
-    def get_long_name(self, player_id):
+    def get_long_name(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         if player_profile_tm_page_content.find('table', {'class': 'auflistung'}).find('th') != None:
-            player_tm_long_name = player_profile_tm_page_content.find('table', {'class': 'auflistung'}).find('td').text if (player_profile_tm_page_content. find('table', {'class': 'auflistung'}).find('th').text == "Full name:" or player_profile_tm_page_content.find('table', {'class': 'auflistung'}). find('th').text == "Name in home country:") else self.get_full_name(self.player_id)
+            player_tm_long_name = player_profile_tm_page_content.find('table', {'class': 'auflistung'}).find('td').text if (player_profile_tm_page_content. find('table', {'class': 'auflistung'}).find('th').text == "Full name:" or player_profile_tm_page_content.find('table', {'class': 'auflistung'}). find('th').text == "Name in home country:") else self.get_full_name()
         return player_tm_long_name
     
-    def get_profile_img_url(self, player_id):
+    def get_profile_img_url(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         if player_profile_tm_page_content != None:
             player_img_big = player_profile_tm_page_content.find('div', {'class': 'dataBild'}).find('img')['src']  
@@ -96,7 +96,7 @@ class Player(models.Model):
         if "default" in player_img_big: player_img_big = "static/img/no_img.png"
         return player_img_big
     
-    def get_nationality(self, player_id):
+    def get_nationality(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         player_tm_info_table_rows = player_profile_tm_page_content.find('table', {'class': 'auflistung'}).find_all('tr')
         for row in player_tm_info_table_rows: #there's no specific class for the tr elements, so I need to target it some other way
@@ -106,7 +106,7 @@ class Player(models.Model):
                 "Unknown"
         return player_tm_nationality.replace("\'", "")
     
-    def get_date_of_birth(self, player_id):
+    def get_date_of_birth(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         player_tm_info_table_rows = player_profile_tm_page_content.find('table', {'class': 'auflistung'}).find_all('tr')
         for row in player_tm_info_table_rows:
@@ -114,16 +114,16 @@ class Player(models.Model):
                 player_tm_date_of_birth = row.find('a').text
         return player_tm_date_of_birth
     
-    def get_position(self, player_id):
+    def get_position(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         player_tm_info_table_rows = player_profile_tm_page_content.find('table', {'class': 'auflistung'}).find_all('tr')
         for row in player_tm_info_table_rows:
             if row.find('th').find(string=re.compile("Position:")):
                 player_tm_position = row.find('td').text
-        player_tm_position = player_tm_position.replace("  ", " ").replace("\n", "")
+        player_tm_position = player_tm_position.lstrip().capitalize()
         return player_tm_position
 
-    def get_position_general(self, player_id):
+    def get_position_general(self):
         position_lowercase = self.position.lower()
         if "goalkeeper" in position_lowercase : pos_general = "Goalkeeper"
         elif "back" in position_lowercase or "sweeper" in position_lowercase : pos_general = "Defense"
@@ -133,7 +133,7 @@ class Player(models.Model):
         return pos_general
 
 
-    def get_club(self, player_id):
+    def get_club(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         player_tm_info_table_rows = player_profile_tm_page_content.find('table', {'class': 'auflistung'}).find_all('tr')
         for row in player_tm_info_table_rows:
@@ -141,12 +141,12 @@ class Player(models.Model):
                 player_tm_club = row.find_all('a')
         return player_tm_club[1].text
 
-    def get_club_img_url(self, player_id):
+    def get_club_img_url(self):
         player_profile_tm_page_content = self.get_profilepage_content()
         club_img_url = player_profile_tm_page_content.find('div', {'class': 'dataZusatzImage'}).find('a').find('img')['src']
         return club_img_url
 
-    def get_national_team(self, player_id):
+    def get_national_team(self):
         content = self.get_detailedstats_content()
         player_verification = content.find('p', {'class': 'notTablet'})
         if player_verification == None: # means that player has no national experience
@@ -155,7 +155,7 @@ class Player(models.Model):
             national_team_name = player_verification.find('a', {'class': 'vereinprofil_tooltip'}).text
         return national_team_name
 
-    def get_national_team_img_url(self, player_id):
+    def get_national_team_img_url(self):
         content = self.get_detailedstats_content()
         if not self.national_team == "None":
             nat_link = 'https://www.transfermarkt.co.uk' + content.find('p', {'class': 'notTablet'}).find('span', {'class': 'dataValue'}).find('a')['href']
@@ -165,7 +165,7 @@ class Player(models.Model):
             nat_img = ""
         return nat_img
     
-    def get_played_seasons(self, player_id):
+    def get_played_seasons(self):
         content = self.get_detailedstats_content()
         stats_table_body_row = content.find('table', {'class': 'items'}).find('tbody').find_all('tr')
         seasons_list = []
@@ -178,12 +178,12 @@ class Player(models.Model):
                 seasons_list.append(season)
         return len(seasons_list)
 
-    def get_played_games_club(self, player_id):
+    def get_played_games_club(self):
         content = self.get_detailedstats_content()
         stats_table_footer_cells = content.find('table', {'class': 'items'}).find('tfoot').find_all('td')
         return int(stats_table_footer_cells[4].text)
 
-    def get_played_games_national(self, player_id):
+    def get_played_games_national(self):
         content = self.get_nationalstats_content()
         tr_list = []
         table_div = content.find('div', {'class': 'large-8'})
@@ -200,10 +200,10 @@ class Player(models.Model):
                     played_games_national = content.select('div.large-8.columns > div:nth-child(1) > table > tbody > tr:nth-child(2) > td:nth-child(5) > a')[0].text
         return int(played_games_national)
 
-    def get_played_games(self, player_id):
+    def get_played_games(self):
         return self.played_games_club + self.played_games_national
 
-    def get_total_games_injured(self, player_id):
+    def get_total_games_injured(self):
         content = self.get_injuries_content()
         if content.find('div', {'id': 'yw1'}).find('table'):
             all_rows = content.find('div', {'id': 'yw1'}).find('table').find('tbody').find_all('tr')
@@ -216,7 +216,7 @@ class Player(models.Model):
             total_injured_games = 0
         return total_injured_games
 
-    def get_total_days_injured(self, player_id):
+    def get_total_days_injured(self):
         content = self.get_injuries_content()
         if content.find('div', {'id': 'yw1'}).find('table'):
             all_rows = content.find('div', {'id': 'yw1'}).find('table').find('tbody').find_all('tr')
@@ -231,12 +231,12 @@ class Player(models.Model):
             total_injured_days = 0
         return total_injured_days
         
-    def get_goals_club(self, player_id):
+    def get_goals_club(self):
         content = self.get_detailedstats_content()
         stats_table_footer_cells = content.find('table', {'class': 'items'}).find('tfoot').find_all('td')
         return int(stats_table_footer_cells[6].text)
 
-    def get_goals_national(self, player_id):
+    def get_goals_national(self):
         content = self.get_nationalstats_content()
         tr_list = []
         table_div = content.find('div', {'class': 'large-8'})
@@ -254,25 +254,25 @@ class Player(models.Model):
                     national_goals = content.select('div.large-8.columns > div:nth-child(1) > table > tbody > tr:nth-child(2) > td:nth-child(6) > a')[0].text
         return int(national_goals)
 
-    def get_goals(self, player_id):
+    def get_goals(self):
         return self.goals_club + self.goals_national
 
 
-    def get_assists_club(self, player_id):
+    def get_assists_club(self):
         content = self.get_detailedstats_content()
         stats_table_footer_cells = content.find('table', {'class': 'items'}).find('tfoot').find_all('td')
         return int(stats_table_footer_cells[7].text)
 
-    def get_assists_national(self, player_id):
+    def get_assists_national(self):
         content = self.get_nationalstats_content()
         assists = int(content.find('div', {'class': 'responsive-table'}).find('table').find('tfoot').find('tr').find_all('td')[4].text if content.find('div', {'class': 'responsive-table'}).find('table').find('tfoot').find('tr').find_all('td')[4].text != "-" else 0)
         return assists
 
-    def get_assists(self, player_id):
+    def get_assists(self):
         return self.assists_club + self.assists_national
 
 
-    def get_minutes_club(self, player_id):
+    def get_minutes_club(self):
         content = self.get_detailedstats_content()
         stats_table_footer_cells = content.find('table', {'class': 'items'}).find('tfoot').find_all('td')
         if "." in stats_table_footer_cells[9].text: 
@@ -280,7 +280,7 @@ class Player(models.Model):
             played_minutes2 = played_minutes.replace("'", "")
         return int(played_minutes2)
 
-    def get_minutes_national(self, player_id):
+    def get_minutes_national(self):
         content = self.get_nationalstats_content()
         player_verification = content.find('form', {'class': 'js-form-params2path'})
         if player_verification == None: # means that player has no international experience
@@ -294,27 +294,27 @@ class Player(models.Model):
                 nat_mins = convert_tm_mins_to_int(national_apps_mins)
         return int(nat_mins)
 
-    def get_minutes(self, player_id):
+    def get_minutes(self):
         return self.minutes_club + self.minutes_national
     
-    def get_cc(self, player_id):
+    def get_cc(self):
         return self.goals + self.assists
     
-    def get_goals_90(self, player_id):
+    def get_goals_90(self):
         goals_90 = round(self.goals/(self.minutes/90), 2)
         return goals_90
     
-    def get_assists_90(self, player_id):
+    def get_assists_90(self):
         assists_90 = round(self.assists/(self.minutes/90), 2)
         return assists_90
     
-    def get_cc_90(self, player_id):
+    def get_cc_90(self):
         cc_90 = round(self.cc/(self.minutes/90), 2)
         return cc_90
 
 
 
-    def get_yellow_cards(self, player_id):
+    def get_yellow_cards(self):
         content = self.get_detailedstats_content()
         stats_table_footer_cells = content.find('table', {'class': 'items'}).find('tfoot').find_all('td')
         yellow_cards = stats_table_footer_cells[8].text.partition("/")[0]
@@ -323,29 +323,29 @@ class Player(models.Model):
         if "-" in second_yellow_cards: second_yellow_cards = second_yellow_cards.replace("-", "0")
         return int(yellow_cards) + int(second_yellow_cards)
 
-    def get_red_cards(self, player_id):
+    def get_red_cards(self):
         content = self.get_detailedstats_content()
         stats_table_footer_cells = content.find('table', {'class': 'items'}).find('tfoot').find_all('td')
         red_cards = stats_table_footer_cells[8].text.partition("/")[2].partition("/")[2]
         if "-" in red_cards: red_cards = red_cards.replace("-", "0")
         return int(red_cards)
 
-    def get_total_cards_weighted(self, player_id):
+    def get_total_cards_weighted(self):
         return self.yellow_cards + self.red_cards*3
 
-    def get_yc90(self, player_id):
+    def get_yc90(self):
         yc90 = round(self.yellow_cards/(self.minutes/90), 2)
         return yc90
 
-    def get_rc90(self, player_id):
+    def get_rc90(self):
         if self.red_cards != 0: rc90 = round(self.red_cards/(self.minutes/90), 2)
         else: rc90 = 0
         return rc90
 
-    def get_sb_aggression_index(self, player_id):
+    def get_sb_aggression_index(self):
         return float(round((self.total_cards_weighted / self.minutes )*10000, 2))
 
-    def get_seasons_active(self, player_id):
+    def get_seasons_active(self):
         content = self.get_detailedstats_content()
         all_seasons_options = content.find('select', {'name': 'saison'}).find_all('option')
         seasons_list = []
@@ -354,7 +354,7 @@ class Player(models.Model):
                 seasons_list.append(int(all_seasons_options[i]['value']))
         return list(reversed(seasons_list))
 
-    def get_goals_types_club(self, player_id):
+    def get_goals_types_club(self):
         allgoals_content = self.get_allgoals_content()
         table_rows = allgoals_content.select('#main > div:nth-child(17) > div.large-8.columns > div > div.responsive-table > table > tbody')[0].find_all('tr')
         allgoals_list = []
@@ -368,7 +368,7 @@ class Player(models.Model):
         get_ordered_goal_types_dict(allgoals_list)
         return get_ordered_goal_types_dict(allgoals_list)
 
-    def get_goals_types_national(self, player_id):
+    def get_goals_types_national(self):
         national_content = self.get_nationalstats_content()
         national_goals_num = int(national_content.find('table').find('tbody').find_all('tr')[1].find_all('td')[5].text.replace("-", "0")) if "U1" not in national_content.find('table').find('tbody').find_all('tr')[1].find_all('td')[1].text and "U2" not in national_content.find('table').find('tbody').find_all('tr')[1].find_all('td')[1].text and "Olympic" not in national_content.find('table').find('tbody').find_all('tr')[1].find_all('td')[1].text else 0
         try:# sometimes transfermarkt has issues with showing up national statistics, I need to work around this somehow
@@ -410,15 +410,15 @@ class Player(models.Model):
             allgoals_list = ["Unknown"] * national_goals_num
         return get_ordered_goal_types_dict(allgoals_list)
 
-    def get_goals_types(self, player_id):
-        goals_types_club = self.get_goals_types_club(self.player_id)
-        goals_types_national = self.get_goals_types_national(self.player_id)
+    def get_goals_types(self):
+        goals_types_club = self.get_goals_types_club()
+        goals_types_national = self.get_goals_types_national()
         summed_dict = {}
         for key in goals_types_club.keys():
             summed_dict[key] = int(goals_types_club[key]) + int(goals_types_national[key])
         return summed_dict
 
-    def get_leagues_dict(self, player_id):
+    def get_leagues_dict(self):
         player_page_content = self.get_detailedstats_content()
         player_leagues_rows = player_page_content.find('div', {'id': 'yw1'}).find('table').find('tbody').find_all('tr')
         for row in player_leagues_rows:
@@ -448,30 +448,17 @@ class Player(models.Model):
             player_league_dict.update(player_national_dict)
         return player_league_dict
 
-    def get_sb_index_by_league(self, player_id):
-        '''all_player_leagues = [x for x in self.get_leagues_dict(self.player_id).keys() if x != 'name' and x != 'games' and x != 'goals' and x != 'assists' and x != 'minutes' and x != 'weight']
-        league_sb_index_dict = {}
-        leagues_dict = json.loads(self.leagues_dict.replace("'", "\""))
-        for league in all_player_leagues:
-            minutes = leagues_dict[league]['minutes']
-            goals = leagues_dict[league]['goals']
-            assists = leagues_dict[league]['assists']
-            weight = leagues_dict[league]['weight']
-            try:
-                league_sb_index = calculate_sb_index(goals, assists, minutes, weight)
-            except ZeroDivisionError:
-                league_sb_index = 0
-            league_sb_index_dict[league] = league_sb_index'''
+    def get_sb_index_by_league(self):
         sb_index_by_league_dict = {}
-        all_player_leagues = self.get_leagues_dict(self.player_id).keys()
+        all_player_leagues = self.get_leagues_dict().keys()
         for league in all_player_leagues:
-            sb_index_by_league_dict[league] = self.get_leagues_dict(self.player_id)[league]["sb_index"]
+            sb_index_by_league_dict[league] = self.get_leagues_dict()[league]["sb_index"]
         return sb_index_by_league_dict
 
-    def get_total_sb_index(self, player_id):
-        return round(sum([x for x in self.get_sb_index_by_league(self.player_id).values()]), 2)
+    def get_total_sb_index(self):
+        return round(sum([x for x in self.get_sb_index_by_league().values()]), 2)
 
-    def get_season_competition_stats(self, player_id):
+    def get_season_competition_stats(self):
         all_season_comps_stats = {}
         total_season_sb_index_list = []
         for season in json.loads(self.seasons_active.replace("'", "\"")):
@@ -508,8 +495,8 @@ class Player(models.Model):
         all_season_comps_stats.update(sb_index_by_season)
         return all_season_comps_stats
 
-    def get_detailed_stats(self, player_id):
-        seasons_active = self.get_seasons_active(self.player_id)
+    def get_detailed_stats(self):
+        seasons_active = self.get_seasons_active()
         season_games_list = self.get_stat_by_season('#yw1 > table > tfoot > tr > td:nth-child(4)')
         season_minutes_list = self.get_stat_by_season('#yw1 > table > tfoot > tr > td:nth-child(9)')
         season_goals_list = self.get_stat_by_season('#yw1 > table > tfoot > tr > td:nth-child(6)')
@@ -700,7 +687,7 @@ class Player(models.Model):
 # H E L P E R S
     def get_stat_by_season(self, selector):
         season_stat_list = []
-        for season in self.get_seasons_active(self.player_id):
+        for season in self.get_seasons_active():
             content = self.get_seasonalstats_content(season)
             if content.select('#yw1 > table'):
                 season_stat = content.select(selector)[0].text
@@ -807,4 +794,3 @@ def get_leagues_weights():
     for league in League.objects.all():
         league.weight = leagues_weights[league.name]
         league.save()
-###

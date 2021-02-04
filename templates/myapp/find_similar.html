@@ -1,28 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="my-table-container">
-  <h5>Players similar to {{player_1_obj.full_name}}:</h5></a>
-  <table class=search-results>
-    <thead>
-      <tr>
-        <td></td>
-        <td>Name</td>
-        <td>Current club</td>
-        <td>Date of birth</td>
-      </tr>
-    </thead>
-    <tbody>
-{% for player in queryset_list %}
-      <tr class="search-result-row" data-url=player/{{player.player_id}}>
-          <td><img src={{player.profile_img_url}}></td>
-          <td>{{player.long_name}}</td>
-          <td>{{player.club}}</td>
-          <td>{{player.date_of_birth}}</td>
-      </tr>
-{% endfor %}
-    </tbody>
-  </table>
-</div>
+  {% if queryset_list %}
+    <div class="my-table-container">
+      <h5>Players similar to {{player_1_obj.full_name}}:</h5></a>
+      <table class="search-results">
+        <thead>
+          <tr>
+            <td></td>
+            <td>Name</td>
+            <td>Current club</td>
+            <td>Date of birth</td>
+          </tr>
+        </thead>
+        <tbody>
+        {% for player in queryset_list %}
+              <tr class="search-result-row" data-url=player/{{player.player_id}}>
+                  <td><img src={{player.profile_img_url}}></td>
+                  <td>{{player.long_name}}</td>
+                  <td>{{player.club}}</td>
+                  <td>{{player.date_of_birth}}</td>
+              </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <h5 class="nothing-found"> {{nothing_found}}</h5>
+    <p class="go-back"> <a href="player/{{player_1_obj.player_id}}">Go back to {{player_1_obj.full_name}}'s profile</a></p>
+  {% endif %}
 
 {% endblock content %}

@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{{test_var}}
 <div class="player_profile_container">
   <div class="player-bio-container">
     <div class="player-info-container">
@@ -21,7 +20,7 @@
           <span>Compare with...</span>
           <div class="searchbox-compare-container">
             <form class="searchbox-compare" action="{% url 'compare_players' %}" method="get" >
-                <input type="text" id="compare-players" placeholder="Player to compare" name="search-compare" class="searchbox-compare-input" onkeyup="buttonCompareUp();" required>
+                <input type="text" id="compare-players" placeholder="Player to compare" name="search-compare" class="searchbox-compare-input" required>
                 <input type="text" name="player_1_id" value={{sb_player.player_id}} style='display: none;'>
                 <button class="compare-submit" type="submit" name="action" style="background-color: #514a4a;">GO
               </button>

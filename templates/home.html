@@ -4,20 +4,49 @@
 <h5 class="home-title">Most popular players:</h5>
 <div class="swiper-container">
   <div class="swiper-wrapper">
-    {% for player in test_var %}
+    {% for player in most_popular %}
     <div class="swiper-slide">
-      <img class="swiper-background-club" src={{player.club_img_url}}>
       <img class="swiper-background-national" src={{player.national_team_img_url}}>
+      <a href=player/{{player.player_id}}>
       <div class="swiper-content-wrapper">
-      <img class="swiper-img" src={{player.profile_img_url}}>
-      <p class="swiper-name"><a href=player/{{player.player_id}}>{{player.full_name}}</a></p>
+        <img class="swiper-img" src={{player.profile_img_url}}>
+        <p class="swiper-name">{{player.full_name}}</p>
       </div>
+      </a>
+      <img class="swiper-background-club" src={{player.club_img_url}}>
     </div>
     {%endfor%}
   </div>
-  <!-- Add Arrows -->
+  <!-- Arrows -->
   <div class="swiper-button-next"></div>
   <div class="swiper-button-prev"></div>
 </div>
 
+<h5 class="home-title">Top players:</h5>
+<div class="home-top-table-container">
+  <table class="top-results">
+    <thead>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>Current club</td>
+        <td>Total SB Index</td>
+      </tr>
+    </thead>
+    <tbody>
+{% for player in top_players %}
+  {% if forloop.counter == 2 %}
+      <tr class="top-results-row-even" data-url=player/{{player.player_id}}>
+  {% else %} 
+      <tr class="top-results-row" data-url=player/{{player.player_id}}>
+  {% endif %}
+          <td class="top_player_img"><img src={{player.profile_img_url}}></td>
+          <td>{{player.full_name}}</td>
+          <td>{{player.club}}</td>
+          <td class="sb-index">{{player.total_sb_index}}</td>
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock content %}

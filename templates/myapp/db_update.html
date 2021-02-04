@@ -4,8 +4,6 @@
 <form method="post">
     {% csrf_token %}
     <input class="db-updating-button tippy-tooltipped" type="submit" name="get_new_button" value="Transfer data" id="tt_transfer_data"/>
-    <input class="db-updating-button tippy-tooltipped" type="submit" name="get_player_button" value="Transfer whole player" id="tt_transfer_player" />
-    <input class="db-updating-button tippy-tooltipped" type="submit" name="get_leagues_button" value="Transfer leagues" id="tt_transfer_leagues" />
 </form>
 
 <h4>Current player id: {{sb_player.player_id}}</h4>
@@ -15,6 +13,4 @@
 <p>Attributes left for current player: {{attribute_count}}</p>
 <p>Number of players in the database: {{ all_db_players_num }}</p>
 
-
-{{test_var}}
 {% endblock content %}

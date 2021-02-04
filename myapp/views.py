@@ -4,9 +4,8 @@ from . import models
 from myapp.content.helpers import *
 from myapp.content.constants import *
 from bs4 import BeautifulSoup
-from myapp.models import Player, League, get_gameinfo_page_content, get_ordered_goal_types_dict, calculate_sb_index, get_leagues_weights, get_league_weight
+from myapp.models import Player, League, get_gameinfo_page_content, get_leagues_weights
 from django.db.models import F, Q, Max
-from django.http import JsonResponse
 from django.core.serializers import serialize 
 
 import json
@@ -15,10 +14,11 @@ import re
 
 def home(request):
     all_players_list = Player.objects.all()
-    most_popular = Player.objects.annotate(Max('views_count')).order_by('-views_count')
-    test_var = most_popular[0:4]
+    most_popular = Player.objects.annotate(Max('views_count')).order_by('-views_count')[0:4]
+    top_players = Player.objects.annotate(Max('total_sb_index')).order_by('-total_sb_index')[0:3]
     context = {
-        'test_var': test_var,
+        'most_popular': most_popular,
+        'top_players': top_players
     }
     return render(request, 'home.html', context)
 
@@ -27,7 +27,6 @@ def new_search(request):
     search = request.POST.get('search')
     models.Search.objects.create(search=search)
     queryset_list = Player.objects.filter(full_name__icontains=search)
-    test_var = queryset_list
     return render(request, 'myapp/new_search.html', {'queryset_list': queryset_list, 'search': search})
 
 
@@ -37,9 +36,7 @@ def player_profile(request, player_tm_id):
     sb_player.views_count += 1
     sent_names_id_dict = get_name_id_dict(sb_player.player_id) # this is a dictionary with names and IDs of players just for autocomplete function
     player_obj_js = sb_player.get_attrs_values_dict()
-    test_var = ""
     context = {
-        'test_var': test_var,
         'sb_player': sb_player,
         'sent_names_id_dict': sent_names_id_dict,
         'player_obj_js': player_obj_js,
@@ -48,87 +45,37 @@ def player_profile(request, player_tm_id):
 
 
 def db_update(request):
-    current_player_id = 40432 
+    current_player_id = 7349 # 3187
+    transferred_data = ""
+    transferred_attr = ""
+    next_attribute_index = 0
+    
     if not Player.objects.filter(player_id=current_player_id).exists():
         models.Player.objects.create(
             player_id=current_player_id)
     sb_player = Player.objects.get(player_id=current_player_id)
+    methods_list = sb_player.get_all_methods()
+    attributes_list = sb_player.get_all_attributes()
     attribute_count = []
     for i in range (10000):
-        methods_list = sb_player.get_all_methods()
-        attributes_list = sb_player.get_all_attributes()
         if len(attribute_count) == 0:
-            if sb_player.player_id != 8: # THERE IS NO PLAYER WITH ID OF 9 IN TM DATABASE, THUS I NEED TO DO IT THIS WAY
-                if not Player.objects.filter(player_id=current_player_id+1).exists():
-                    models.Player.objects.create(
-                        player_id=current_player_id+1)
-                sb_player = Player.objects.get(player_id=current_player_id+1)
-                current_player_id += 1
-            else:
-                if not Player.objects.filter(player_id=current_player_id+2).exists():
-                    models.Player.objects.create(
-                        player_id=current_player_id+2)
-                sb_player = Player.objects.get(player_id=current_player_id+2)
-                current_player_id += 2
-            for attribute in attributes_list:
+            sb_player = Player.objects.get(player_id=current_player_id)
+            current_player_id += 1
+            attribute_count = [attribute for attribute in attributes_list if getattr(sb_player, attribute) == None]
+            for idx, attribute in enumerate(attributes_list):
                 if getattr(sb_player, attribute) == None:
-                    attribute_count.append(attribute)
-
-    next_attribute = ""
-    transferred_data = ""
-    transferred_attr = ""
-    iteration_index = -1
-    next_attribute_index = 0
-    for attribute in attributes_list:
-        iteration_index += 1
-        if getattr(sb_player, attribute) == None:
-            next_attribute = attribute
-            next_attribute_index = iteration_index
-            break
-
+                    next_attribute = attribute
+                    next_attribute_index = idx
+                    break
 
     if request.POST.get('get_new_button'):
-        value = getattr(sb_player, methods_list[next_attribute_index])(current_player_id)
+        value = getattr(sb_player, methods_list[next_attribute_index])()
         setattr(sb_player, next_attribute, value)
         transferred_data = value
         transferred_attr = attributes_list[next_attribute_index]
         sb_player.save()
 
-    if request.POST.get('get_player_button'):
-        for function_num in range (len(methods_list)):
-            next_attr = attributes_list[function_num]
-            value = getattr(sb_player, methods_list[function_num])(current_player_id)
-            setattr(sb_player, next_attr, value)
-            transferred_data = value
-            transferred_attr = next_attr
-        sb_player.save()
-
-# generate leagues
-    if request.POST.get('get_leagues_button'):
-        all_existing_players = Player.objects.all()
-        
-        for player in all_existing_players: 
-            if player.full_name != None:
-                profile_content = player.get_profilepage_content()
-                if profile_content.find('div', {'id': 'yw2'}):
-                    comps_rows = profile_content.find('div', {'id': 'yw2'}).find('table').find('tbody').find_all('tr')
-                else: 
-                    comps_rows = profile_content.find('div', {'id': 'yw1'}).find('table').find('tbody').find_all('tr')
-                for row in comps_rows:
-                    if len(row) > 2:    
-                        comp_link = 'https://www.transfermarkt.co.uk' + row.find_all('td')[1].find('a')['href']
-                        comppage_content = get_gameinfo_page_content(comp_link)
-                        if comppage_content.find('div', {'id': 'wettbewerb_head'}).find('div', {'class': 'box-header'}):
-                            comp_name = comppage_content.find('div', {'id': 'wettbewerb_head'}).find('div', {'class': 'box-header'}).find('h1').text.replace("'", "")
-                        else:
-                            comp_name = comppage_content.find('div', {'id': 'wettbewerb_head'}).find('h1', {'itemprop': 'name'}).text.replace("'", "")
-                            # IF IT'S STILL TO LITTLE, ADD ANOTHER ONES
-                        if not League.objects.filter(name=comp_name).exists():
-                            models.League.objects.create(name=comp_name)
-        get_leagues_weights()
-
     all_db_players_num = len(Player.objects.all())
-    test_var = ''#sb_player.get_all_methods()
     context = {
         'sb_player': sb_player,
         'transferred_data': transferred_data,
@@ -136,7 +83,6 @@ def db_update(request):
         'next_attribute_index': next_attribute_index,
         'next_attribute': next_attribute,
         'all_db_players_num': all_db_players_num,
-        'test_var': test_var,
         'attribute_count': attribute_count,
     }
     return render(request, 'myapp/db_update.html', context)
@@ -234,5 +180,5 @@ def find_similar(request):
     player_1_id = request.POST.get('player_1_id')
     player_1_obj = Player.objects.get(player_id=player_1_id)
     queryset_list = Player.objects.filter(~Q(player_id=player_1_id), cc_90__gte=player_1_obj.cc_90-0.21, cc_90__lte=player_1_obj.cc_90+0.21, total_sb_index__gte=player_1_obj.total_sb_index-40, total_sb_index__lte=player_1_obj.total_sb_index+40, position__icontains=player_1_obj.position_general)
-    test_var = queryset_list
-    return render(request, 'myapp/find_similar.html', {'queryset_list': queryset_list, 'test_var': test_var, 'player_1_obj': player_1_obj,})
+    nothing_found = f'There is only one {player_1_obj.full_name}. No one to compare!'
+    return render(request, 'myapp/find_similar.html', {'queryset_list': queryset_list, 'player_1_obj': player_1_obj, 'nothing_found': nothing_found})

@@ -1,5 +1,17 @@
+body {
+    background-color: #dadada;
+}
+
+div.container:not(.nav-wrapper) {
+    background-color: #fff;
+    padding: 0 10px 10px 10px;
+    box-shadow: 1px 1px 3px 0px rgba(112,112,112,1);
+}
+
 .nav-test{
     background-color: #514a4a;
+    z-index: 9;
+    position: relative;
 }
 .logo-small{
     max-height: 50px;
@@ -81,7 +93,11 @@
 }
 .player-career-total-container h5 {
     text-align: center;
-    margin: 5px 0 5px 0;
+    margin: 10px 0;
+}
+
+div.player_goals_container h5, div.player_goals_types_container h5{
+    margin: 10px 0;
 }
 
 .player-career-table-tg{
@@ -453,7 +469,6 @@ table.dataTable tbody tr {
 }
   .swiper-container {
     width: 100%;
-    height: 500px;
 }
   .swiper-slide {
     text-align: center;
@@ -478,6 +493,9 @@ table.dataTable tbody tr {
   .swiper-img{
       height: 60%;
 }
+div img.swiper-img{
+    border-radius: 10%;
+}
   .swiper-content-wrapper{
     display: inline-flex;
     flex-direction: column;
@@ -486,28 +504,41 @@ table.dataTable tbody tr {
     height: 90%;
     z-index: 990;
 }
-  body > div > div > div.swiper-button-next, body > div > div > div.swiper-button-prev{
+
+div.swiper-container-horizontal{
+    border-bottom: 1px solid rgba(160,160,160,0.2);
+}
+
+div.swiper-button-prev{
       color: black;
 }
-  body > div > div > div.swiper-wrapper > div.swiper-slide.swiper-slide-active > img.swiper-background-club{
+img.swiper-background-national{
     opacity: 0.1;
     z-index: 989;
-    height: 50%;
-    position: absolute;
-    right: 90px;
-    top: 120px;
+    margin-right: 150px;
 }
-  body > div > div > div.swiper-wrapper > div.swiper-slide.swiper-slide-active > img.swiper-background-national{
-    opacity: 0.1;
-    z-index: 989;
-    height: 50%;
-    position: absolute;
-    left: 90px;
-    top: 120px;
+img.swiper-background-club{
+    margin-left: 150px;
+    height: 150px;
 }
-  body > div > div > div.swiper-wrapper > div.swiper-slide.swiper-slide-active > div > p > a{
+
+  p.swiper-name{
       color: rgb(0, 0, 0);
       font-weight: 500;
+}
+
+
+div.swiper-content-wrapper{
+    padding-top: 10px;
+}
+p.swiper-name {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+h5.home-title {
+    padding-top: 10px;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
   .player_profile_container h5{
       text-align: center;
@@ -522,7 +553,7 @@ table.dataTable tbody tr {
     margin-top: 5px;
 }
 #player_comp_chart{
-    margin-top: 10px;
+    padding-top: 10px;
 }
 .search-result-row{
     cursor: pointer;
@@ -542,4 +573,60 @@ table.dataTable tbody tr {
 }
 #pps-button-find-similar span {
     margin-left: 0 !important;
+}
+
+div.home-top-table-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+.top-results thead{
+    font-weight: 700;
+}
+
+.top-results-row, .top-results-row-even{
+    cursor: pointer;
+    border: none;
+    font-size: 18px;
+}
+
+table.top-results tr td:not(.top_player_img) {
+    text-align: center;
+}
+
+table.top-results tr td.top_player_img{
+    padding-top: 5px;
+    padding-bottom: 0;
+}
+
+table.top-results tr td.top_player_img img{
+    height: 100px;
+}
+
+.top-results thead {
+    background-color: #f5f3f2;
+}
+
+td.sb-index {
+    font-weight: 500;
+}
+
+.top-results-row-even {
+    background-color: #f5f3f2;
+}
+
+h5.nothing-found {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+p.go-back a{
+    font-size: 14px;
+}
+
+p.go-back {
+    text-align: center;
+    margin: 5px 0;
 }

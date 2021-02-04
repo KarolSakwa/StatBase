@@ -1,3 +1,5 @@
+# **[CHECK HOW STATBASE WORKS!](https://statbasetest.herokuapp.com/)**
+
 ![StatBase player comparison feature](https://github.com/KarolSakwa/StatBase/blob/master/StatBase%20-%20screen.png?raw=true "StatBase player comparison feature")
 
 ��#StatBase

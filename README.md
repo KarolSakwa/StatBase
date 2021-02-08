@@ -3,7 +3,7 @@
   <a href="https://statbasetest.herokuapp.com/"><img src="https://github.com/KarolSakwa/StatBase/blob/master/static/StatBase/img/sb_logo_mid.png" alt="StatBase" ></a>
   <br>
 </h1>
-<h4 align="center">Detailed statistical database of football players. Based on data scraped from Transfermarkt.de. Check how it works<a href="https://statbasetest.herokuapp.com/"> here</a>.</h4>
+<h5 align="center">Detailed statistical database of football players. Based on data scraped from Transfermarkt.de. Check how it works<a href="https://statbasetest.herokuapp.com/"> here</a>.</h5>
 <br>
 <p align="center">
   <a href="#general-info">General info</a> •

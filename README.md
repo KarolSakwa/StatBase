@@ -7,7 +7,8 @@
 <br>
 <p align="center">
   <a href="#general-info">General info</a> •
-  <a href="#technologies">Technologies</a>
+  <a href="#technologies">Technologies</a> •
+  <a href="#status">Project status</a>
 </p>
 <h1 align="center">
   <img src="https://github.com/KarolSakwa/StatBase/blob/master/static/StatBase/img/sb-demo.gif?raw=true" alt="StatBase demo" />
@@ -31,3 +32,11 @@ StatBase is a web application based on data scraped from Transfermarkt.de. It al
 - Materialize
 - Chart.js
 - DataTables
+
+## Project status
+
+The project is still being developed. There are a lot more features to be implemented, such as:
+- Significant improvement in the performance of SB Index - there are many more variables to include
+- Much larger players database
+- New section inside home page
+- Many more types of statistics and classifications
